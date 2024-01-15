@@ -12,7 +12,6 @@ console.log(pool);
 async function dbConnectionMiddleware(req, res, next) {
   try {
     if (pool == null) {
-      console.log("Connecting to the Azure SQL database SERVERJS");
       pool = await getConnection();
       console.log("Database connected!");
     }

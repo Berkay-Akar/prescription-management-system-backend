@@ -1,3 +1,5 @@
+dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -33,7 +35,7 @@ app.use(dbConnectionMiddleware);
 app.use("/auth", authenticationRouter);
 app.use("/prescription", prescriptionRouter);
 
-if (process.env.VERCEL == "1") {
+if (process.env.VERCEL === "1") {
 } else {
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

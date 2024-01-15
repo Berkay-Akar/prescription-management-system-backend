@@ -37,14 +37,14 @@ app.get("/users", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { pharmacyName, username, password } = req.body;
     console.log(req.body);
     const request = new sql.Request();
 
     // Check if username exists
     let result = await request
       .input("username", sql.VarChar, username)
-      .query(`SELECT * FROM [dbo].[user] WHERE username = @username`);
+      .query(`SELECT * FROM [dbo].[Pharmacies] WHERE username = @username`);
     if (result.recordset.length > 0) {
       return res.status(400).send("Username is already taken");
     }
@@ -54,8 +54,8 @@ app.post("/signup", async (req, res) => {
 
     // Insert the new user into the database
     await request.query(
-      `INSERT INTO [dbo].[pharmacies] (username, password) 
-       VALUES (''${username}', '${hashedPassword}')`
+      `INSERT INTO [dbo].[pharmacies] (pharmacyName,username, password) 
+      VALUES ('${pharmacyName}', '${username}', '${hashedPassword}')`
     );
 
     // Generate JWT token

@@ -37,7 +37,7 @@ app.get("/users", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   try {
-    const { firstName, lastName, username, email, password } = req.body;
+    const { username, password } = req.body;
     console.log(req.body);
     const request = new sql.Request();
 
@@ -49,21 +49,13 @@ app.post("/signup", async (req, res) => {
       return res.status(400).send("Username is already taken");
     }
 
-    // Check if email exists
-    result = await request
-      .input("email", sql.VarChar, email)
-      .query(`SELECT * FROM [dbo].[user] WHERE email = @email`);
-    if (result.recordset.length > 0) {
-      return res.status(400).send("Email is already taken");
-    }
-
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert the new user into the database
     await request.query(
-      `INSERT INTO [dbo].[user] (firstName, lastName, username, password, email) 
-       VALUES ('${firstName}', '${lastName}', '${username}', '${hashedPassword}', '${email}')`
+      `INSERT INTO [dbo].[pharmacies] (username, password) 
+       VALUES (''${username}', '${hashedPassword}')`
     );
 
     // Generate JWT token

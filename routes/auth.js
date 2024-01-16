@@ -115,6 +115,7 @@ app.get("/pharmacies", async (req, res) => {
     // Get user from database
     const request = new sql.Request();
     const result = await request.query("SELECT * FROM [dbo].[pharmacies]");
+    console.log(result);
     console.log(result.recordset);
     res.send(result.recordset); // Send the result
   } catch (err) {

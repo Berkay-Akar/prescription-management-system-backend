@@ -127,4 +127,66 @@ app.get("/pharmacies", async (req, res) => {
   }
 });
 
+//create user get (tcNo,name,surname)
+app.post("/createUser", async (req, res) => {
+  try {
+    // Check if token is valid
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).send("No token provided");
+    }
+
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, secretKey); // Verify the token synchronously
+
+    // Get user from database
+    const request = new sql.Request();
+    const result = await request.query(
+      "INSERT INTO [dbo].[user] (tcNo,name,surname) VALUES ('" +
+        req.body.tcNo +
+        "', '" +
+        req.body.name +
+        "', '" +
+        req.body.surname +
+        "')"
+    );
+    console.log(result.recordset);
+    res.send(result.recordset); // Send the result
+  } catch (err) {
+    if (err.name === "JsonWebTokenError") {
+      return res.status(401).send("Invalid token");
+    }
+    console.error(err);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+//find user by tcNo
+app.get("/findUser/:tcNo", async (req, res) => {
+  try {
+    // Check if token is valid
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).send("No token provided");
+    }
+
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, secretKey); // Verify the token synchronously
+
+    // Get user from database
+    const request = new sql.Request();
+    const result = await request.query(
+      "SELECT * FROM [dbo].[user] WHERE tcNo = '" + req.params.tcNo + "'"
+    );
+    console.log(result.recordset);
+    res.send(result.recordset); // Send the result
+  } catch (err) {
+    if (err.name === "JsonWebTokenError") {
+      return res.status(401).send("Invalid token");
+    }
+    console.error(err);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = app;

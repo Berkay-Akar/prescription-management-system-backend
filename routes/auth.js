@@ -100,4 +100,30 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//get all pharmacies
+app.get("/pharmacies", async (req, res) => {
+  try {
+    // Check if token is valid
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).send("No token provided");
+    }
+
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, secretKey); // Verify the token synchronously
+
+    // Get user from database
+    const request = new sql.Request();
+    const result = await request.query("SELECT * FROM [dbo].[pharmacies]");
+    console.log(result.recordset);
+    res.send(result.recordset); // Send the result
+  } catch (err) {
+    if (err.name === "JsonWebTokenError") {
+      return res.status(401).send("Invalid token");
+    }
+    console.error(err);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = app;

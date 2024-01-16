@@ -130,7 +130,7 @@ app.get("/pharmacies", async (req, res) => {
 //create user get (tcNo,name,surname)
 app.post("/createUser", async (req, res) => {
   try {
-    // Check if token is valid
+    // // Check if token is valid
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return res.status(401).send("No token provided");
@@ -150,7 +150,7 @@ app.post("/createUser", async (req, res) => {
         req.body.surname +
         "')"
     );
-    console.log(result.recordset);
+    console.log(result);
     res.send(result.recordset); // Send the result
   } catch (err) {
     if (err.name === "JsonWebTokenError") {
@@ -162,9 +162,8 @@ app.post("/createUser", async (req, res) => {
 });
 
 //find user by tcNo
-app.get("/findUser/:tcNo", async (req, res) => {
+app.get("/findUser", async (req, res) => {
   try {
-    // Check if token is valid
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return res.status(401).send("No token provided");
@@ -176,7 +175,7 @@ app.get("/findUser/:tcNo", async (req, res) => {
     // Get user from database
     const request = new sql.Request();
     const result = await request.query(
-      "SELECT * FROM [dbo].[user] WHERE tcNo = '" + req.params.tcNo + "'"
+      "SELECT * FROM [dbo].[user] WHERE tcNo = '" + req.query.tcNo + "'"
     );
     console.log(result.recordset);
     res.send(result.recordset); // Send the result

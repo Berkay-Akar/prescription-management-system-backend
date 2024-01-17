@@ -99,9 +99,11 @@ app.post("/login", async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign({ username }, secretKey, { expiresIn: "1h" });
+    const user = result.recordset[0];
+    console.log(user);
 
     // Send the token as a response
-    res.json({ token });
+    res.json({ token, user });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");

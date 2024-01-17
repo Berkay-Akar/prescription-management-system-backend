@@ -11,15 +11,6 @@ const { get } = require("http");
 
 app.get("/getPrescriptions", async (req, res) => {
   try {
-    // Check if token is valid
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query("SELECT * FROM [dbo].[prescription]");
@@ -36,15 +27,6 @@ app.get("/getPrescriptions", async (req, res) => {
 
 app.post("/createPrescriptions", async (req, res) => {
   try {
-    // Check if token is valid
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query(
@@ -72,15 +54,6 @@ app.post("/createPrescriptions", async (req, res) => {
 //get medicines
 app.get("/getMedicines", async (req, res) => {
   try {
-    // Check if token is valid
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query("SELECT * FROM [dbo].[medicines]");
@@ -98,15 +71,6 @@ app.get("/getMedicines", async (req, res) => {
 //search medicines
 app.get("/searchMedicines", async (req, res) => {
   try {
-    // Check if token is valid
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query(
@@ -129,15 +93,6 @@ app.get("/searchMedicines", async (req, res) => {
 //add medicines to cart
 app.post("/addMedicinesToCart", async (req, res) => {
   try {
-    // Check if token is valid
-    // const authHeader = req.headers.authorization;
-    // if (!authHeader) {
-    //   return res.status(401).send("No token provided");
-    // }
-
-    // const token = authHeader.split(" ")[1];
-    // jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query(

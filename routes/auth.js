@@ -44,7 +44,7 @@ app.post("/signup", async (req, res) => {
     // Check if username exists
     let result = await request
       .input("username", sql.VarChar, username)
-      .query(`SELECT * FROM [dbo].[Pharmacies] WHERE username = @username`);
+      .query(`SELECT * FROM [dbo].[pharmacies] WHERE username = @username`);
     if (result.recordset.length > 0) {
       return res.status(400).send("Username is already taken");
     }
@@ -74,7 +74,7 @@ app.post("/login", async (req, res) => {
     request.input("username", sql.VarChar, username);
 
     const result = await request.query(
-      `SELECT * FROM [dbo].[user] WHERE username = @username`
+      `SELECT * FROM [dbo].[pharmacies] WHERE username = @username`
     );
     if (result.recordset.length === 0) {
       return res.status(400).send("Username or password is incorrect");
@@ -131,13 +131,13 @@ app.get("/pharmacies", async (req, res) => {
 app.post("/createUser", async (req, res) => {
   try {
     // // Check if token is valid
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
+    // const authHeader = req.headers.authorization;
+    // if (!authHeader) {
+    //   return res.status(401).send("No token provided");
+    // }
 
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
+    // const token = authHeader.split(" ")[1];
+    // jwt.verify(token, secretKey); // Verify the token synchronously
 
     // Get user from database
     const request = new sql.Request();

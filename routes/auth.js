@@ -113,15 +113,6 @@ app.post("/login", async (req, res) => {
 //get all pharmacies
 app.get("/pharmacies", async (req, res) => {
   try {
-    // Check if token is valid
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query("SELECT * FROM [dbo].[pharmacies]");
@@ -140,15 +131,6 @@ app.get("/pharmacies", async (req, res) => {
 //create user get (tcNo,name,surname)
 app.post("/createUser", async (req, res) => {
   try {
-    // // Check if token is valid
-    // const authHeader = req.headers.authorization;
-    // if (!authHeader) {
-    //   return res.status(401).send("No token provided");
-    // }
-
-    // const token = authHeader.split(" ")[1];
-    // jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query(
@@ -174,20 +156,12 @@ app.post("/createUser", async (req, res) => {
 //find user by tcNo
 app.get("/findUser", async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).send("No token provided");
-    }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, secretKey); // Verify the token synchronously
-
     // Get user from database
     const request = new sql.Request();
     const result = await request.query(
       "SELECT * FROM [dbo].[user] WHERE tcNo = '" + req.query.tcNo + "'"
     );
-    console.log(result.recordset);
+
     res.send(result.recordset); // Send the result
   } catch (err) {
     if (err.name === "JsonWebTokenError") {

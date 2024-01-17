@@ -67,24 +67,32 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// Login endpoint
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const request = new sql.Request();
-    request.input("username", sql.VarChar, username);
 
-    const result = await request.query(
-      `SELECT * FROM [dbo].[pharmacies] WHERE username = @username`
-    );
+    // Chaining input and query execution
+    let result = await request
+      .input("username", sql.VarChar, username)
+      .query("SELECT * FROM [dbo].[pharmacies] WHERE username = @username");
+
     if (result.recordset.length === 0) {
       return res.status(400).send("Username or password is incorrect");
+    }
+
+    // Check if the password from the database is undefined or null
+    if (!result.recordset[0].Password) {
+      return res.status(400).send("Password not set for this user");
     }
 
     // Compare hashed password
     const validPassword = await bcrypt.compare(
       password,
-      result.recordset[0].password
+      result.recordset[0].Password
     );
+
     if (!validPassword) {
       return res.status(400).send("Username or password is incorrect");
     }
